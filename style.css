@@ -1,0 +1,65 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.split-pane {
+    display: flex;
+    height: 100%;
+}
+
+.pane {
+    flex: 1;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.pane.left {
+    border-right: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.resize-handle {
+    background-color: #ddd;
+    cursor: col-resize;
+    flex-shrink: 0;
+    width: 5px;
+}
+
+.resize-handle:hover {
+    background-color: #999;
+}
+
+.pane.right {
+    background: #fff;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.word-count, .read-time{
+    margin-right: 4rem;
+}
+
+.word-count, .read-time, .performance {
+    display: inline-block;
+    font-size: 1rem;
+    color: #333;
+}

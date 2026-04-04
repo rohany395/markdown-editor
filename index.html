@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Editor</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="nav-bar">
+        <span class="word-count">Word Count: 0</span>
+        <span class="read-time">Read Time: 0 mins</span>
+        <span class="performance"></span>
+    </header>
+    <div class="split-pane">
+        <section class="pane left">
+            <label for="editor">Markdown Input</label>
+            <textarea id="editor" placeholder="Type markdown here..."></textarea>
+        </section>
+        <div class="resize-handle"></div>
+        <section class="pane right" id="preview">
+        <!-- Rendered output or any other content goes here -->
+        </section>
+    </div>
+</body>
+</html>
