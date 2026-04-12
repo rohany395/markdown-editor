@@ -13,6 +13,7 @@ const allowedAttributes = {
     'a': ['href'],
     'img': ['src', 'alt']
 };
+let latestRequestId = 0;
 
 
 document.getElementsByClassName('resize-handle')[0].addEventListener('mousedown', () => {
@@ -67,7 +68,6 @@ function debounce(fn,delay) {
 const debounceHandler = debounce(handleInput, 150);
 editor.addEventListener('input', debounceHandler);
 
-let latestRequestId = 0;
 function handleInput() {
     const markdownText = editor.value;
     const start = performance.now();
@@ -85,7 +85,8 @@ function handleInput() {
         wordCountElement.textContent = `Word Count: ${wordCount}`;
         readTimeElement.textContent = `Read Time: ${readTime} mins`;
     });
-}
+    saveDraft(markdownText)
+};
 
 parserWorker.onmessage = function(e) {
     const { html, id } = e.data;
@@ -140,3 +141,53 @@ function sanitizeNode(node) {
         }
     }
 }
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = window.indexedDB.open('markcraft',1);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            db.createObjectStore("drafts");
+        };
+        request.onsuccess = (event) => {
+            resolve(event.target.result);
+        };
+        request.onerror = (event) => {
+            reject(event.target.error);
+        };
+    });
+}
+
+async function saveDraft(text) {
+    const db = await openDB();
+    const transaction = db.transaction('drafts', 'readwrite');
+    const store = transaction.objectStore('drafts');
+    store.put(text, "current-draft");
+}
+
+async function loadDraft() {
+    const db = await openDB();
+    const transaction = db.transaction('drafts', 'readonly');
+    const store = transaction.objectStore('drafts');
+    
+    return new Promise((resolve, reject) => {
+        const request = store.get("current-draft");
+        request.onsuccess = () => {
+            resolve(request.result);
+        }   
+        request.onerror = () => {
+            reject(request.error);
+        }
+    });
+}
+
+async function init() {
+    const saved = await loadDraft();
+    if (saved) {
+        editor.value = saved;
+        handleInput();
+    }
+}
+
+init();
