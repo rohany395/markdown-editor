@@ -15,6 +15,10 @@ const allowedAttributes = {
 };
 let latestRequestId = 0;
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+}
+
 
 document.getElementsByClassName('resize-handle')[0].addEventListener('mousedown', () => {
     isResizing = true;
